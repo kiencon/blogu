@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VPC Sizing and Structure</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 20px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #2c3e50;
+    }
+
+    ul {
+      list-style-type: disc;
+      margin-left: 20px;
+    }
+
+    p {
+      color: #34495e;
+    }
+
+    .note {
+      background-color: #f4f6f7;
+      padding: 10px;
+      border-left: 5px solid #2ecc71;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>VPC Sizing and Structure Knowledge Takeaways</h1>
+
+  <h2>Introduction</h2>
+  <p>This lesson focuses on designing a well-structured and scalable network inside AWS using a VPC. It emphasizes the
+    importance of planning an IP plan for a business, especially when running in AWS.</p>
+
+  <h2>Key Considerations for VPC Design</h2>
+  <ul>
+    <li><strong>IP Range Selection:</strong> Deciding on the IP range (CIDR) for the VPC is crucial as it's not easy to
+      change later.</li>
+    <li><strong>VPC Size:</strong> The size of the VPC influences how many services can fit into it. Each service
+      occupies space inside the VPC with one or more IPs.</li>
+    <li><strong>Network Interaction:</strong> Consider other networks you'll interact with to avoid overlapping or
+      duplicate ranges which could complicate communication.</li>
+    <li><strong>Future Growth:</strong> Predict future needs and changes in the network structure to accommodate growth.
+    </li>
+  </ul>
+
+  <h2>VPC Structure Breakdown</h2>
+  <ul>
+    <li><strong>Tiers:</strong> IT networks typically have tiers like web, application, and database tiers. These tiers
+      separate components and allow different security applications.</li>
+    <li><strong>Availability Zones:</strong> Networks are often split across availability zones for resiliency.</li>
+    <li><strong>Subnet Allocation:</strong> Each tier should have its own subnet in each Availability Zone. For example,
+      four Availability Zones would mean four subnets per tier (web, app, DB, spare).</li>
+  </ul>
+
+  <h2>VPC Sizing Guidelines</h2>
+  <ul>
+    <li><strong>Micro VPC:</strong> A /24 VPC with eight /27 subnets, totaling 216 IP addresses.</li>
+    <li><strong>Extra Large VPC:</strong> A /16 VPC with sixteen /20 subnets, totaling over 65,000 IP addresses.</li>
+    <li><strong>Subnet Calculation:</strong> If starting with a /16 VPC, splitting into 16 subnets results in /20
+      subnets, each with 4,091 IP addresses.</li>
+  </ul>
+
+  <h2>Designing for Animals4Life Organization</h2>
+  <p>The design process considered the following:</p>
+  <ul>
+    <li><strong>Avoided Ranges:</strong> Specific ranges were avoided due to existing usage in other networks (e.g.,
+      192.168.10.0/24, 10.0.0.0/16, 172.31.0.0/16).</li>
+    <li><strong>Preferred Range:</strong> Used the 10.x.y.z range but avoided common subnets like 10.0 to 10.10.</li>
+    <li><strong>Regional Allocation:</strong> Allocated specific /16 blocks for regions (US, Europe, Australia),
+      ensuring non-overlapping ranges.</li>
+    <li><strong>Account Segregation:</strong> Each AWS account (General, Prod, Dev, Reserved) received four /16 ranges
+      per region, allowing for multiple VPCs.</li>
+  </ul>
+
+  <div class="note">
+    <p><strong>Note:</strong> A downloadable PDF document was provided detailing the IP plan structure. This document
+      serves as a foundational reference for large AWS deployments and includes allocated ranges for each region and
+      account.</p>
+  </div>
+
+  <h2>Conclusion</h2>
+  <p>Designing a VPC involves careful planning of IP ranges, considering current and future needs, avoiding overlaps,
+    and structuring subnets based on tiers and availability zones. This structured approach ensures scalability and
+    resilience in AWS environments.</p>
+</body>
+
+</html>
