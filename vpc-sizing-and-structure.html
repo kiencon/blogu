@@ -6,37 +6,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VPC Sizing and Structure</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      margin: 20px;
+    :root {
+      --bg: #0f1220;
+      --panel: #151a2b;
+      --text: #e8ecf1;
+      --sub: #b9c2cf;
+      --accent: #7aa2ff;
+      --code-bg: #0b0f1a;
+      --border: #2a3553;
+      --good: #7ae582;
+      --warn: #ffd166;
+      --bad:  #ff6b6b;
     }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; line-height: 1.6; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 24px; }
+    header { background: linear-gradient(135deg, #1a2040, #0f1533); padding: 24px; border-radius: 16px; border: 1px solid var(--border); }
+    h1 { margin: 0 0 8px 0; font-size: 28px; }
+    .subtitle { color: var(--sub); margin-top: 0; }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px 18px; margin: 22px 0; }
+    h2 { margin-top: 32px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    h3 { margin-top: 24px; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    pre { background: var(--code-bg); padding: 14px; border-radius: 12px; border: 1px solid var(--border); overflow-x: auto; }
+    .toc { columns: 2; column-gap: 24px; }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; border: 1px solid var(--border); background: #101632; color: var(--sub); }
+    .checklist li { margin-bottom: 8px; }
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .note { border-left: 4px solid var(--accent); padding-left: 12px; color: var(--sub); }
+    .ok { color: var(--good); }
+    .warn { color: var(--warn); }
+    .bad { color: var(--bad); }
+    .kbd{display:inline-block;padding:.15rem .38rem;border:1px solid var(--border);border-bottom-width:3px;border-radius:6px;background:#0e142e;color:#d6dcff;font-weight:600}
 
-    h1,
-    h2,
-    h3 {
-      color: #2c3e50;
-    }
-
-    ul {
-      list-style-type: disc;
-      margin-left: 20px;
-    }
-
-    p {
-      color: #34495e;
-    }
-
-    .note {
-      background-color: #f4f6f7;
-      padding: 10px;
-      border-left: 5px solid #2ecc71;
-      margin: 10px 0;
+    .container {
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
     }
   </style>
 </head>
 
-<body>
+<body class="container">
   <h1>VPC Sizing and Structure Knowledge Takeaways</h1>
 
   <h2>Introduction</h2>

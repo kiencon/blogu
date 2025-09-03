@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>C# Crash Course – Day 1 Summary</title>
+  <style>
+    :root {
+      --bg: #0f1220;
+      --panel: #151a2b;
+      --text: #e8ecf1;
+      --sub: #b9c2cf;
+      --accent: #7aa2ff;
+      --code-bg: #0b0f1a;
+      --border: #2a3553;
+      --good: #7ae582;
+      --warn: #ffd166;
+      --bad:  #ff6b6b;
+    }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; line-height: 1.6; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 24px; }
+    header { background: linear-gradient(135deg, #1a2040, #0f1533); padding: 24px; border-radius: 16px; border: 1px solid var(--border); }
+    h1 { margin: 0 0 8px 0; font-size: 28px; }
+    .subtitle { color: var(--sub); margin-top: 0; }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px 18px; margin: 22px 0; }
+    h2 { margin-top: 32px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    h3 { margin-top: 24px; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    pre { background: var(--code-bg); padding: 14px; border-radius: 12px; border: 1px solid var(--border); overflow-x: auto; }
+    .toc { columns: 2; column-gap: 24px; }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; border: 1px solid var(--border); background: #101632; color: var(--sub); }
+    .checklist li { margin-bottom: 8px; }
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .note { border-left: 4px solid var(--accent); padding-left: 12px; color: var(--sub); }
+    .ok { color: var(--good); }
+    .warn { color: var(--warn); }
+    .bad { color: var(--bad); }
+    .kbd{display:inline-block;padding:.15rem .38rem;border:1px solid var(--border);border-bottom-width:3px;border-radius:6px;background:#0e142e;color:#d6dcff;font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>C# Crash Course – Day 1 Summary</h1>
+      <p class="subtitle">A compact, industry-ready refresher of core &amp; modern C# (C# 8–12 / .NET 8)</p>
+        <div class="panel">
+          <b>What you’ll recall today</b>
+          <ul>
+            <li>Core syntax &amp; project setup via <code>dotnet</code> CLI</li>
+            <li>Value vs Reference types, Boxing/Unboxing, Strings &amp; immutability</li>
+            <li>Modern operators: null safety, pattern matching, switch expressions</li>
+            <li>Tuples, deconstruction, local functions, ranges/indices</li>
+            <li>Nullable reference types, expression-bodied members, records</li>
+            <li>Style checklist + final mini-challenges</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <b>Quick commands</b>
+          <pre><code>dotnet --version
+dotnet new console -n Demo
+dotnet run --project Demo
+
+dotnet new sln -n Calc3
+dotnet new console -n Calc3.App
+dotnet new classlib -n Calc3.Lib
+dotnet sln Calc3.sln add Calc3.App/Calc3.App.csproj Calc3.Lib/Calc3.Lib.csproj
+dotnet add Calc3.App/Calc3.App.csproj reference Calc3.Lib/Calc3.Lib.csproj
+</code></pre>
+        </div>
+    </header>
+
+    <section id="toc" class="panel">
+      <h2>Table of Contents</h2>
+      <div class="toc">
+        <p><a href="#setup">1. Setup &amp; Project Structure</a></p>
+        <p><a href="#syntax">2. Program Structure &amp; Top-level Statements</a></p>
+        <p><a href="#types">3. Value vs Reference Types</a></p>
+        <p><a href="#boxing">4. Boxing &amp; Unboxing</a></p>
+        <p><a href="#strings">5. Strings &amp; Immutability</a></p>
+        <p><a href="#operators">6. Operators: Null-Safety &amp; Switch Expressions</a></p>
+        <p><a href="#var-dynamic-object">7. var, dynamic, object &amp; Defaults</a></p>
+        <p><a href="#const-readonly">8. const / readonly / static readonly</a></p>
+        <p><a href="#expressions">9. Expressions vs Statements &amp; Expression-bodied</a></p>
+        <p><a href="#tuples">10. Tuples, Deconstruction &amp; Discards</a></p>
+        <p><a href="#records">11. Records (preview for OOP)</a></p>
+        <p><a href="#conversions">12. Type Conversions &amp; TryParse</a></p>
+        <p><a href="#checked">13. checked / unchecked</a></p>
+        <p><a href="#local-functions">14. Local Functions</a></p>
+        <p><a href="#using">15. using: Namespaces &amp; Disposal</a></p>
+        <p><a href="#ranges">16. Ranges &amp; Indices</a></p>
+        <p><a href="#nullable">17. Nullable Reference Types</a></p>
+        <p><a href="#style">18. Coding Style Checklist</a></p>
+        <p><a href="#challenges">19. Mini-Challenges (Calculator 2.0 &amp; 3.0)</a></p>
+      </div>
+    </section>
+
+    <section id="setup" class="panel">
+      <h2>1) Setup &amp; Project Structure</h2>
+      <p>Verify SDK, create solution and projects with the .NET CLI.</p>
+      <pre><code>dotnet --version
+dotnet new sln -n Calc3
+dotnet new console -n Calc3.App
+dotnet new classlib -n Calc3.Lib
+dotnet sln Calc3.sln add Calc3.App/Calc3.App.csproj Calc3.Lib/Calc3.Lib.csproj
+dotnet add Calc3.App/Calc3.App.csproj reference Calc3.Lib/Calc3.Lib.csproj</code></pre>
+      <p class="note">Enable <code>&lt;Nullable&gt;enable&lt;/Nullable&gt;</code> and <code>&lt;LangVersion&gt;latest&lt;/LangVersion&gt;</code> in both <code>.csproj</code> files.</p>
+    </section>
+
+    <section id="syntax" class="panel">
+      <h2>2) Program Structure &amp; Top-level Statements</h2>
+      <pre><code>// Classic
+using System;
+class Program {
+  static void Main(string[] args) {
+    Console.WriteLine("Hello, World!");
+  }
+}</code></pre>
+      <pre><code>// Top-level (C# 9+)
+Console.WriteLine("Hello, World!");</code></pre>
+    </section>
+
+    <section id="types" class="panel">
+      <h2>3) Value vs Reference Types</h2>
+        <div>
+          <p><span class="tag">Value Types</span> <code>int</code>, <code>double</code>, <code>bool</code>, <code>struct</code>. Copy = new value.</p>
+          <pre><code>int x = 5; int y = x; y++; // x still 5</code></pre>
+        </div>
+        <div>
+          <p><span class="tag">Reference Types</span> <code>class</code>, <code>string</code>, <code>array</code>. Copy = same reference.</p>
+          <pre><code>var a1 = new int[]{1,2}; var a2 = a1; a2[0] = 99; // a1[0] == 99</code></pre>
+        </div>
+    </section>
+
+    <section id="boxing" class="panel">
+      <h2>4) Boxing &amp; Unboxing</h2>
+      <pre><code>int a = 42;
+object boxed = a;   // boxing
+int b = (int)boxed; // unboxing</code></pre>
+      <p class="note">Avoid unintended boxing in hot paths (old collections like <code>ArrayList</code>, interface calls on value types, etc.).</p>
+    </section>
+
+    <section id="strings" class="panel">
+      <h2>5) Strings &amp; Immutability</h2>
+      <pre><code>string s = "Hello"; s += " World"; // new string allocated
+// Use StringBuilder for heavy concatenation</code></pre>
+    </section>
+
+    <section id="operators" class="panel">
+      <h2>6) Operators: Null-Safety &amp; Switch Expressions</h2>
+        <div>
+          <h3>Null safety</h3>
+          <pre><code>string? input = null;
+string name = input ?? "Guest";  // coalescing
+name ??= "Guest";                 // assignment
+int? len = name?.Length;          // conditional access</code></pre>
+        </div>
+        <div>
+          <h3>Switch expressions &amp; patterns</h3>
+          <pre><code>string Category(int n) => n switch {
+  &lt; 0   =&gt; "neg",
+  0     =&gt; "zero",
+  &lt;= 10 =&gt; "small",
+  &lt;= 100=&gt; "medium",
+  _     =&gt; "large"
+};</code></pre>
+        </div>
+    </section>
+
+    <section id="var-dynamic-object" class="panel">
+      <h2>7) var, dynamic, object &amp; Defaults</h2>
+      <pre><code>var i = 42;          // compile-time inference
+object o = 42;       // boxed int
+dynamic d = "hello"; // runtime-typed
+Console.WriteLine(default(int));    // 0
+Console.WriteLine(default(string)); // null</code></pre>
+      <p class="note"><b>Guideline:</b> Prefer <code>var</code> when type is obvious; avoid <code>dynamic</code> unless required.</p>
+    </section>
+
+    <section id="const-readonly" class="panel">
+      <h2>8) const / readonly / static readonly</h2>
+      <pre><code>public class Config {
+  public const double Pi = 3.14159;     // compile-time const
+  public readonly Guid Id = Guid.NewGuid(); // set in ctor
+  public static readonly DateTime Start = DateTime.Now; // per-type
+}</code></pre>
+    </section>
+
+    <section id="expressions" class="panel">
+      <h2>9) Expressions vs Statements &amp; Expression-bodied</h2>
+      <pre><code>public class Person {
+  public string Name { get; }
+  public Person(string name) =&gt; Name = name; // expression-bodied ctor
+  public override string ToString() =&gt; $"Name: {Name}";
+}</code></pre>
+    </section>
+
+    <section id="tuples" class="panel">
+      <h2>10) Tuples, Deconstruction &amp; Discards</h2>
+      <pre><code>var person = (Name: "Sonny", Age: 28);
+var (name, age) = person;
+var (_, onlyAge) = person; // discard first</code></pre>
+    </section>
+
+    <section id="records" class="panel">
+      <h2>11) Records (preview for OOP)</h2>
+      <pre><code>public record Person(string First, string Last);
+var p1 = new Person("Sonny","Bui");
+var p2 = p1 with { Last = "Nguyen" };</code></pre>
+      <p>Immutable by default with value-based equality.</p>
+    </section>
+
+    <section id="conversions" class="panel">
+      <h2>12) Type Conversions &amp; TryParse</h2>
+      <pre><code>double x = 3.14; int n = (int)x; // explicit
+if (int.TryParse("123", out var v)) { /* use v */ }</code></pre>
+      <p>Prefer culture-invariant parsing for CLI tools:</p>
+      <pre><code>double.TryParse(text, System.Globalization.NumberStyles.Float,
+  System.Globalization.CultureInfo.InvariantCulture, out var value);</code></pre>
+    </section>
+
+    <section id="checked" class="panel">
+      <h2>13) checked / unchecked</h2>
+      <pre><code>checked {
+  int a = int.MaxValue;
+  int b = a + 1; // throws OverflowException
+}</code></pre>
+    </section>
+
+    <section id="local-functions" class="panel">
+      <h2>14) Local Functions</h2>
+      <pre><code>int Factorial(int n) {
+  return Inner(n);
+  int Inner(int k) =&gt; (k &lt;= 1) ? 1 : k * Inner(k - 1);
+}</code></pre>
+    </section>
+
+    <section id="using" class="panel">
+      <h2>15) using: Namespaces &amp; Disposal</h2>
+        <div>
+          <pre><code>using System.Text; // import namespace</code></pre>
+        </div>
+        <div>
+          <pre><code>using var reader = new StreamReader("file.txt"); // dispose at scope end</code></pre>
+        </div>
+    </section>
+
+    <section id="ranges" class="panel">
+      <h2>16) Ranges &amp; Indices</h2>
+      <pre><code>var arr = new[]{10,20,30,40,50};
+Console.WriteLine(arr[^1]);  // 50 (last)
+var slice = arr[1..4];       // {20,30,40}</code></pre>
+    </section>
+
+    <section id="nullable" class="panel">
+      <h2>17) Nullable Reference Types</h2>
+      <pre><code>#nullable enable
+string? name = null;
+Console.WriteLine(name.Length); // warning: possible null</code></pre>
+      <p class="note">Turn on in project files: <code>&lt;Nullable&gt;enable&lt;/Nullable&gt;</code>.</p>
+    </section>
+
+    <section id="style" class="panel">
+      <h2>18) Coding Style Checklist</h2>
+      <ul class="checklist">
+        <li><b>Naming:</b> PascalCase for types/methods/properties; camelCase for locals/params.</li>
+        <li><b>Braces:</b> Always use braces for clarity and safer diffs.</li>
+        <li><b>var:</b> Prefer when the type is obvious. Otherwise spell the type.</li>
+        <li><b>Null safety:</b> Use <code>?.</code>, <code>??</code>, <code>??=</code>. Avoid null unless intended.</li>
+        <li><b>Separation:</b> One public class per file. Keep Program.cs tidy with local functions.</li>
+        <li><b>Culture:</b> Use invariant parsing/formatting for CLI tools.</li>
+      </ul>
+    </section>
+
+    <section id="challenges" class="panel">
+      <h2>19) Mini-Challenges</h2>
+      <h3>Calculator 2.0 (switch expression + tuples)</h3>
+      <pre><code>public static (double result, bool ok) Calc(double a, double b, string op) =&gt;
+  op switch {
+    "+" =&gt; (a + b, true),
+    "-" =&gt; (a - b, true),
+    "*" =&gt; (a * b, true),
+    "/" when b != 0 =&gt; (a / b, true),
+    _ =&gt; (0, false)
+  };</code></pre>
+
+      <h3>Calculator 3.0 (Day‑1 Final Boss)</h3>
+      <ul>
+        <li><span class="tag">Struct &amp; expression-bodied methods</span> for basic ops</li>
+        <li><span class="tag">Switch expression</span> with pattern guards</li>
+        <li><span class="tag">Tuple result</span>: <code>(result, ok, error)</code></li>
+        <li><span class="tag">Local functions</span> for parsing/validation</li>
+        <li><span class="tag">Range mode</span> (e.g., <code>1,2,3</code> + <kbd class="kbd">+</kbd>)</li>
+        <li><span class="tag">Nullable safety</span> throughout</li>
+      </ul>
+
+      <p class="note">Full skeleton created earlier in your solution. Extend with tests and formatting options later.</p>
+    </section>
+
+    <footer class="panel">
+      <p>Prepared for your 20-day C# crash course • Day 1 • Keep this file for quick review anytime.</p>
+    </footer>
+  </div>
+</body>
+</html>
