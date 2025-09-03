@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>C# Crash Course – Day 2 Summary</title>
+  <style>
+    :root {
+      --bg: #0f1220;
+      --panel: #151a2b;
+      --text: #e8ecf1;
+      --sub: #b9c2cf;
+      --accent: #7aa2ff;
+      --code-bg: #0b0f1a;
+      --border: #2a3553;
+      --good: #7ae582;
+      --warn: #ffd166;
+      --bad:  #ff6b6b;
+    }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; line-height: 1.6; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 24px; }
+    header { background: linear-gradient(135deg, #1a2040, #0f1533); padding: 24px; border-radius: 16px; border: 1px solid var(--border); }
+    h1 { margin: 0 0 8px 0; font-size: 28px; }
+    .subtitle { color: var(--sub); margin-top: 0; }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin: 22px 0; }
+    h2 { margin-top: 32px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    h3 { margin-top: 24px; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    pre { background: var(--code-bg); padding: 14px; border-radius: 12px; border: 1px solid var(--border); overflow-x: auto; }
+    .toc { columns: 2; column-gap: 24px; }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; border: 1px solid var(--border); background: #101632; color: var(--sub); }
+    .checklist li { margin-bottom: 8px; }
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .note { border-left: 4px solid var(--accent); padding-left: 12px; color: var(--sub); }
+    .kbd{display:inline-block;padding:.15rem .38rem;border:1px solid var(--border);border-bottom-width:3px;border-radius:6px;background:#0e142e;color:#d6dcff;font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>C# Crash Course – Day 2 Summary</h1>
+      <p class="subtitle">Control Flow & Pattern Matching (C# 8–12)</p>
+    </header>
+
+    <section class="panel">
+      <h2>1) Classic Flow Control</h2>
+      <pre><code>if (x > 0) Console.WriteLine("positive");
+else if (x < 0) Console.WriteLine("negative");
+else Console.WriteLine("zero");
+
+for (int i = 0; i < 5; i++) { ... }
+while (cond) { ... }
+do { ... } while (cond);
+foreach (var item in items) { ... }</code></pre>
+    </section>
+
+    <section class="panel">
+      <h2>2) Modern Pattern Matching</h2>
+      <h3>Switch expression</h3>
+      <pre><code>string Category(int n) => n switch
+{
+    < 0   => "negative",
+    0     => "zero",
+    <= 10 => "small",
+    _     => "large"
+};</code></pre>
+
+      <h3>Relational & logical patterns</h3>
+      <pre><code>string Grade(int s) => s switch
+{
+    < 0 or > 100 => "Invalid",
+    >= 90        => "A",
+    >= 80        => "B",
+    >= 70        => "C",
+    >= 60        => "D",
+    _            => "F"
+};</code></pre>
+
+      <h3>Type patterns</h3>
+      <pre><code>object o = "hello";
+string r = o switch
+{
+    int i    => $"int {i}",
+    string s => $"string {s}",
+    null     => "null",
+    _        => "other"
+};</code></pre>
+
+      <h3>Tuple patterns</h3>
+      <pre><code>string Move((int x, int y) p) => p switch
+{
+    (0, 0)     => "origin",
+    (0, var y) => $"vertical {y}",
+    (var x, 0) => $"horizontal {x}",
+    _          => $"point {p.x},{p.y}"
+};</code></pre>
+
+      <h3>Property patterns</h3>
+      <pre><code>bool IsTeen(Person p) => p switch
+{
+    { Age: >= 13 and <= 19 } => true,
+    _ => false
+};</code></pre>
+    </section>
+
+    <section class="panel">
+      <h2>3) Expression-based Flow</h2>
+      <pre><code>string Access(int age) => age >= 18 ? "Adult" : "Restricted";
+
+if (user is null) return;
+if (!user.Active) return;
+
+var labels = nums.Select(n => n switch
+{
+    < 0 => "neg",
+    0   => "zero",
+    _   => "pos"
+});</code></pre>
+    </section>
+
+    <section class="panel">
+      <h2>4) Iteration Extras</h2>
+      <pre><code>foreach (var (val, idx) in items.Select((v, i) => (v, i)))
+    Console.WriteLine($"{idx}: {val}");
+
+for (int i=0, j=10; i<j; i++, j--) Console.WriteLine($"{i}, {j}");
+
+string? line;
+while ((line = Console.ReadLine()) is not null)
+    Console.WriteLine(line);
+
+IEnumerable<int> Evens(int max)
+{
+    for (int i=0; i<=max; i++)
+        if (i % 2 == 0) yield return i;
+}</code></pre>
+    </section>
+
+    <section class="panel">
+      <h2>5) Best Practices</h2>
+      <ul>
+        <li>Use <b>control flow</b> for expected/common paths.</li>
+        <li>Use <b>exceptions</b> for rare/exceptional cases.</li>
+        <li>Prefer <b>early returns</b> over deep nesting.</li>
+        <li>Favor <b>switch expressions</b> for mapping input → result.</li>
+        <li>Always handle all cases (<code>_</code> or default).</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>6) Mini-Projects / Challenges</h2>
+      <ul>
+        <li><b>Guessing Game 2.0</b> – random 1–100, hints via tuple patterns, 7 tries.</li>
+        <li><b>Grading System</b> – 0–100 → A/B/C/D/F with switch expression.</li>
+        <li><b>Command Parser</b> – e.g., <code>add 5 10</code> → 15.</li>
+        <li><b>FizzBuzz 2.0</b> – with switch expression.</li>
+        <li><b>Rock–Paper–Scissors</b> – tuple pattern decides winner.</li>
+      </ul>
+    </section>
+
+    <footer class="panel">
+      <p>Day 2 complete – Control Flow mastery: classic + modern. Next → Day 3: Methods & Scope.</p>
+    </footer>
+  </div>
+</body>
+</html>
